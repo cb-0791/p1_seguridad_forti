@@ -1,4 +1,4 @@
-[# p1_seguridad_forti](https://youtu.be/QQkzK84si5U
+[[# tarea4_fuga_20250791](https://youtu.be/v0IvYmou8vQ)
 
 # fortigate-security-lab-infra1-0791
 Laboratorio de Seguridad Perimetral e Infraestructura Segura con FortiGate
@@ -8,7 +8,7 @@ Laboratorio de Seguridad Perimetral e Infraestructura Segura con FortiGate
 **Estudiante:** Cóndor Bautista  
 **Matrícula:** 2025-0791  
 **Materia:** Seguridad en Redes  
-**Enlace al Video Demostrativo:** https://youtu.be/QQkzK84si5U
+**Enlace al Video Demostrativo:** https://youtu.be/v0IvYmou8vQ
 
 ---
 
@@ -66,41 +66,29 @@ Se habilitó el servicio de asignación automática de direcciones IP directamen
 
 ##  4. Resultados y Pruebas de Verificación
 
-### Prueba A: Verificación de Anti-Fuga DMZ ➔ LAN
-- **Comando desde un contenedor de la DMZ (`sysCAJA`):**
-  ```bash
-  ping -c 3 10.7.91.1)
-
-  ##  4. Resultados y Pruebas de Verificación
 
 ### Prueba A: Verificación de Anti-Fuga DMZ ➔ LAN
-- **Comando desde un contenedor de la DMZ (`sysCAJA`):**
-  ```bash
-  ping -c 3 10.7.91.1
-Resultado: 100% de pérdida de paquetes (Destination Host Unreachable / Timeout). Se comprueba que las políticas de bloqueo impiden el tráfico lateral hacia la LAN.
+> Captura de la regla de Firewall `DMZ_Bloquear_Trafico_LAN` habilitada en la GUI del FortiGate 
+<img width="448" height="505" alt="imagen_2026-10-10_172759720" src="https://github.com/user-attachments/assets/78c8dd51-58d0-4f60-a90b-a63b8b86ce54" />
 
-Prueba B: Restricción de Internet en la DMZ
-Comando desde sysINVENTARIO hacia internet general:
 
-Bash
-curl -I [https://google.com](https://google.com)
-Resultado: Conexión rechazada / Tiempo de espera agotado. El FortiGate bloquea el tráfico web general, permitiendo únicamente el acceso a los repositorios definidos por FQDN.
+---
 
-Prueba C: Control de Acceso SSH por Roles
-Intento desde webterm-1 (VLAN 10):
+### Prueba B: Restricción de Internet en la DMZ (FQDN)
+>  Captura de pantalla de la sección **Policy & Objects > Firewall Policy** mostrando la regla de FQDN para actualizaciones y la regla de bloqueo general debajo.
+<img width="540" height="509" alt="imagen_2026-10-10_173512091" src="https://github.com/user-attachments/assets/7abaad27-c3c5-4731-8a8d-aaaa05f31217" />
+<img width="763" height="123" alt="imagen_2026-10-10_173615914" src="https://github.com/user-attachments/assets/fbbea71a-20cf-4411-ac80-53bc76afa8f4" />
 
-Bash
-ssh user@10.7.91.196
-Resultado: Conexión bloqueada y rechazada por la política de seguridad.
 
-Intento desde webterm-2 (VLAN 20):
+---
 
-Bash
-ssh admin@10.7.91.196
-Resultado: Conexión SSH exitosa validada por el rol de administración autorizado.
+### Prueba C: Control de Acceso SSH por Roles de VLAN
+>  Captura de los detalles de la política de Firewall que permite SSH desde la VLAN 20 y la regla que lo bloquea desde la VLAN 10.
+<img width="756" height="220" alt="imagen_2026-10-10_173721775" src="https://github.com/user-attachments/assets/28965713-9dc4-4345-bc75-07a3e8995884" />
 
-Prueba D: Bloqueo de Acceso Web al Inventario (Web Filter)
-Acción desde webterm-1 (VLAN 10):
-Ingresar mediante navegador o curl a http://10.7.91.195.
 
-Resultado: El FortiGate intercepta la petición y presenta al usuario la Página de Bloqueo por Violación de Política Web, cumpliendo con el requerimiento de visibilidad del bloqueo.
+---
+
+### Prueba D: Bloqueo de Acceso Web al Inventario (Web Filter)
+>  Captura de pantalla del navegador del usuario (VLAN 10) mostrando la **Página de Bloqueo por Web Filter (FortiGuard Security Warning)** al intentar acceder al servidor de inventario.
+<img width="647" height="519" alt="imagen_2026-10-10_173855003" src="https://github.com/user-attachments/assets/f5e780f0-d882-4a68-875c-0b1fdad80b83" />
